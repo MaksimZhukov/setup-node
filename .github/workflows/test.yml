@@ -1,0 +1,23 @@
+on:
+  - push
+defaults:
+  run:
+    shell: bash
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        node:
+          - 12
+        arch:
+          - x86
+    name: Node ${{ matrix.node }} on ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node
+        uses: aminya/setup-node@x86
+        with:
+          node-version: ${{ matrix.node_version }}
+          node-arch: ${{ matrix.node_arch }}
+      - run: node -e 'console.log(process.arch)'
