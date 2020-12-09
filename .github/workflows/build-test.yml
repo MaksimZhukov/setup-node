@@ -70,3 +70,27 @@ jobs:
           architecture: 'x86'
       - run: node --version
       - run: node __tests__/simple-test.js
+
+  failure1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node 12
+        uses: aminya/setup-node@arch
+        with:
+          node-version: 14.13.0
+          architecture: 'x86'
+      - run: node --version
+      - run: node __tests__/simple-test.js
+  
+  failure2:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node 12
+        uses: aminya/setup-node@arch
+        with:
+          node-version: 14.13.0
+          architecture: 'x86'
+      - run: node --version
+      - run: node __tests__/simple-test.js
