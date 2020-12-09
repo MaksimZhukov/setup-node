@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 12.x
       - run: node --version
-      - run: node ./simple-test.js
+      - run: node __tests__/simple-test.js
 
   download:
     runs-on: ${{ matrix.operating-system }}
@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: 12.16.1
       - run: node --version
-      - run: node ./simple-test.js
+      - run: node __tests__/simple-test.js
 
   arch64:
     runs-on: ${{ matrix.operating-system }}
@@ -54,7 +54,7 @@ jobs:
           node-version: 12.16.1
           architecture: 'x64'
       - run: node --version
-      - run: node ./simple-test.js
+      - run: node __tests__/simple-test.js
   
   arch86:
     runs-on: windows-latest
@@ -69,4 +69,4 @@ jobs:
           node-version: ${{ matrix.node }}
           architecture: 'x86'
       - run: node --version
-      - run: node ./simple-test.js
+      - run: node __tests__/simple-test.js
