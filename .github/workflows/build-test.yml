@@ -1,6 +1,7 @@
 name: build-test
 
 on:
+  workflow_dispatch:
   pull_request:
     paths-ignore:
       - '**.md'    
@@ -20,9 +21,49 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup node 12
-        uses: actions/setup-node@v1
+        uses: aminya/setup-node@arch
         with:
           node-version: 12.x
+      - run: npm ci
+      - run: npm run build
+      - run: npm run format-check
+      - run: npm test
+      - name: Verify no unstaged changes
+        if: runner.os != 'windows'
+        run: __tests__/verify-no-unstaged-changes.sh
+
+  build64:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node 12
+        uses: aminya/setup-node@arch
+        with:
+          node-version: 12.x
+          architecture: 'x64'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run format-check
+      - run: npm test
+      - name: Verify no unstaged changes
+        if: runner.os != 'windows'
+        run: __tests__/verify-no-unstaged-changes.sh
+  
+  arch86:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        node: ['12', '10.x', '14.1.x']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node 12
+        uses: aminya/setup-node@arch
+        with:
+          node-version: ${{ matrix.node }}
+          architecture: 'x86'
       - run: npm ci
       - run: npm run build
       - run: npm run format-check
