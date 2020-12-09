@@ -24,15 +24,10 @@ jobs:
         uses: aminya/setup-node@arch
         with:
           node-version: 12.x
-      - run: npm ci
-      - run: npm run build
-      - run: npm run format-check
-      - run: npm test
-      - name: Verify no unstaged changes
-        if: runner.os != 'windows'
-        run: __tests__/verify-no-unstaged-changes.sh
+      - run: node --version
+      - run: node ./simple-test.js
 
-  build64:
+  download:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
@@ -42,21 +37,30 @@ jobs:
       - name: Setup node 12
         uses: aminya/setup-node@arch
         with:
-          node-version: 12.x
+          node-version: 12.16.1
+      - run: node --version
+      - run: node ./simple-test.js
+
+  arch64:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node 12.16.1
+        uses: aminya/setup-node@arch
+        with:
+          node-version: 12.16.1
           architecture: 'x64'
-      - run: npm ci
-      - run: npm run build
-      - run: npm run format-check
-      - run: npm test
-      - name: Verify no unstaged changes
-        if: runner.os != 'windows'
-        run: __tests__/verify-no-unstaged-changes.sh
+      - run: node --version
+      - run: node ./simple-test.js
   
   arch86:
     runs-on: windows-latest
     strategy:
       matrix:
-        node: ['12', '10.x', '14.1.x']
+        node: ['12', '14.13.0', '12.16.1']
     steps:
       - uses: actions/checkout@v2
       - name: Setup node 12
@@ -64,10 +68,5 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           architecture: 'x86'
-      - run: npm ci
-      - run: npm run build
-      - run: npm run format-check
-      - run: npm test
-      - name: Verify no unstaged changes
-        if: runner.os != 'windows'
-        run: __tests__/verify-no-unstaged-changes.sh
+      - run: node --version
+      - run: node ./simple-test.js
